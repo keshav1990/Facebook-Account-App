@@ -23,6 +23,21 @@
                         <div class="col-md-12 ">
                             <!-- BEGIN SAMPLE FORM PORTLET-->
                             <div class="portlet light ">
+							 <?php if($this->session->flashdata('success')){ ?>
+							<div class="alert alert-success">
+							<a href="#" class="close" data-dismiss="alert">&times;</a>
+							<strong>Success!</strong> <?php echo $this->session->flashdata('success'); ?>
+						</div>
+
+				<?php } else if($this->session->flashdata('error')){  ?>
+
+						<div class="alert alert-danger">
+						<a href="#" class="close" data-dismiss="alert">&times;</a>
+						<strong>Error!</strong> <?php echo $this->session->flashdata('error'); ?>
+						</div>
+						
+						<?php } ?>
+					
                                 <div class="portlet-title">
                                     <div class="caption font-red-sunglo">
                                         <i class="icon-settings font-red-sunglo"></i>
@@ -30,40 +45,43 @@
                                     </div>
                                  </div>
                                 <div class="portlet-body form">
-                                    <form role="form">
+                                  <?php echo  form_open_multipart(''); ?>
                                         <div class="form-body">
-                                           <div >
-                                            <div class="form-group  col-md-6">
-                                                <label>Account Name</label>
+                                           <div class="row">
+										   <?php $account_nameError = strip_tags( form_error('account_name')); ?>
+                                            <div class="form-group  col-md-6 <?php if($account_nameError){ ?> has-error <?php }?>">
+                                                <?php if($account_nameError){ ?> <label class="control-label"><?php echo $account_nameError; ?></label><?php }else{?> <label>Account Name</label><?php } ?>
                                                 <div >
-                                                   
-                                                    <input type="text" name="account_name" class="form-control spinner" placeholder="Account Name"> </div>
-                                            </div>
+                                                 
+                                                    <input type="text" name="account_name" value="<?php echo $account_name; ?>" class="form-control spinner" placeholder="Account Name"> </div>
+														
+											</div>
                                            <div class="form-group  col-md-6">
                                                 <label>Account ID</label>
                                                 <div>
                                                    
-                                                    <input type="text" name="account_id" class="form-control spinner" placeholder="Account ID"> </div>
+                                                    <input type="text" name="account_id" value="<?php echo $account_id; ?>" class="form-control spinner" placeholder="Account ID"> </div>
                                             </div>
                                             </div>
+											<div class="row">
                                          <div class="form-group  col-md-6">
                                                 <label>Total No. of Lead's Need To Send</label>
-                                                <input class="form-control spinner" value="100" name="total_leads" type="text" > 
+                                                <input class="form-control spinner" value="<?php echo $total_leads; ?>" name="total_leads" type="text" > 
 												</div>
                                           
                                             <div class="form-group  col-md-6">
                                                 <label>Status</label>
                                                 <select class="form-control" name="status">
-													<option>Active</option>
-                                                    <option>Disabled</option>
+													<option <?php if($status==1){echo "selected";} ?> value="1">Active</option>
+                                                    <option <?php if($status==0){echo "selected";} ?> value="0">Disabled</option>
                                                     
                                                 </select>
                                             </div>
-                                            
+                                            </div>
                                             
                                         </div>
                                         <div class="form-actions">
-                                            <button type="submit" class="btn blue">Add Account</button>
+                                            <button type="submit"  name="add_account" class="btn blue">Add Account</button>
                                             <button type="reset" class="btn default">Reset Form</button>
                                            
                                         </div>
