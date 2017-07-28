@@ -15,6 +15,8 @@ function remove()
 function edit_record()
 @Description:- This function is create to edit a account.
 
+function logout()
+@Description:- This function is create to logout account.
 */
 
 	class ManageAccounts extends CI_Controller
@@ -22,9 +24,13 @@ function edit_record()
 		public function __construct()
 		{
 			parent::__construct();
-			
+			$this->load->library('pagination');
 			$this->load->library('form_validation');
 			$this->load->model('common_model');
+			if($this->session->userdata('admin_logged_id')!=true)
+				{
+				 redirect("login");
+				}
 		}
 /*  
 	@Description:- This function is create for show the list of all accounts.
@@ -32,16 +38,31 @@ function edit_record()
 		public function index()
 		{
 			$data = array();
+			$offset = ($this->uri->segment(4))? $this->uri->segment(4) : 0;
+			
 			//get_record($tableName="manage_account",$where='',$limit=10)
-			$data['user']  = $this->common_model->get_record("manage_account",'',20);
-			// print_r($response);
-			// die;
+			$data['user']  = $this->common_model->get_record("manage_account",'',10,$offset);
+			$total_rows = $this->common_model->get_total_sum("manage_account");
+			
+			
+			// Set base_url for every links
+					$paginationUrl = base_url()."ManageAccounts/";
+					//load pagination model
+					//$this->load->model("Pagination");
+					//$this->Pagination->make_pagging($paginationUrl,$total_rows , 10, 0);
+					$this->load->library('pagination');
 			//echo $this->db->last_query();
+			$config['base_url'] = $paginationUrl;
+$config['total_rows'] = $total_rows;
+$config['per_page'] = 10;
+
+$this->pagination->initialize($config);
+
+//echo $this->pagination->create_links();
 			$data['theme'] = 'Manage_account';
 			$this->load->view('theme',$data);
 			
 		}
-	
 /*  
 	@Description:- This function is created to add a new account.
  */
@@ -78,8 +99,8 @@ function edit_record()
 			$data['total_leads'] = '100';
 			$data['status'] = '1';	
 			}
-			
-			
+			$data['button_label'] = "Add Account";
+			$data['title'] = "Create Account";
 			//$data['theme'] = 'create_account';
 			$data['theme'] = 'create_account';
 			//print_r($data);
@@ -108,7 +129,20 @@ function edit_record()
 				//both redirect to user list page
 				redirect("ManageAccounts/index");
 			}	
-		
+	
+public function update_status($id){
+if(isset($_GET) && isset($_GET['update_status'])){
+	$data = array(
+				
+				'account_status' => $this->input->get('status')
+			);
+			 $this->common_model->update($data,'manage_account',array('id'=>$id));
+			
+			redirect(base_url('ManageAccounts'));
+			
+}	
+}
+	
 /* 
 	@Description:- This function is create to edit a account.
  */
@@ -156,7 +190,16 @@ function edit_record()
 			//$data['theme'] = 'create_account';
 			$data['theme'] = 'create_account';
 			//print_r($data);
+			$data['button_label'] = "Update";
+			$data['title'] = "Edit Account";
 			$this->load->view('theme',$data);
 			}
-		
+/* @Description:- this function is create to logout account */ 
+			public function logout()
+			{
+				$this->session->sess_destroy();
+				redirect('Login');
+			}
+
+			
 	}

@@ -1,4 +1,17 @@
 <?php
+/* 
+
+class Login 
+@Description:- This function is used for manage the accounts.
+
+function index()
+@Description:- This function is used to show the login page.
+
+function loginAccount()
+@Description:- \
+
+
+*/
 
 	class Login extends CI_Controller
 	{
@@ -12,20 +25,22 @@
 				// }
 			$this->load->model('account_model');
 		}
+/* @Description:- This function is used to show the login page. */
 		public function index()
 		{
 			$this->load->view('user-login');
 		}
+/* @Description:-  */
 			public function loginAccount()
 		{
-			//chek validation for login form
+			
 			$this->form_validation->set_rules('username','username','trim|required' );
 			$this->form_validation->set_rules('password','password', 'trim|required');
-			//if validation run false
+				/* this condition is used to check the form validation */
 			if($this->form_validation->run() == FALSE)
 			{
+				/* if user is login with invalid account the redirect same page. */
 				if(isset($this->session->userdata['logged_in']))
-				// If user did not validate, then show them login page again
 				$this->load->view('user-login');
 			}
 			else
@@ -41,7 +56,7 @@
 					$result = $this->account_model->login($data);
 				//print_r($result);
 			// die;
-			 
+			 /* if we are getting any response then the store detail in session and redirect */
 			  if(count($result)>0)
 			  {
 				//create an array

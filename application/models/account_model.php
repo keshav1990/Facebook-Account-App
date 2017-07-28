@@ -1,4 +1,12 @@
 <?php
+/* 
+class account_model 
+@Description:- This class is create for login account.
+
+function login()
+@Description:- This function is created to get and match the login user account detail.
+
+ */
 	class account_model extends CI_Model
 	{
 		public function __construct()
@@ -6,6 +14,7 @@
 			parent::__construct();
 			
 		}
+/* @Description:- get the record from database */
 		//read data using username and password
 		 public function login($data) 
 		{

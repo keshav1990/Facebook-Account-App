@@ -3,7 +3,7 @@
             <div class="page-header-inner ">
                 <!-- BEGIN LOGO -->
                 <div class="page-logo">
-                    <a href="index.html">
+                    <a href="#">
                         <img src="<?php echo base_url(); ?>assets/layouts/layout2/img/logo-default.png" alt="logo" class="logo-default"> </a>
                     <div class="menu-toggler sidebar-toggler">
                         <!-- DOC: Remove the above "hide" to enable the sidebar toggler button on header -->
@@ -38,7 +38,7 @@
                                   
                                   
                                     <li>
-                                        <a href="page_user_login_1.html">
+                                        <a href="<?php echo base_url('ManageAccounts/logout/');?>">
                                             <i class="icon-key"></i> Log Out </a>
                                     </li>
                                 </ul>

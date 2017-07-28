@@ -10,7 +10,7 @@
                         <ul class="page-breadcrumb">
                             <li>
                                 <i class="icon-home"></i>
-                                <a href="index.html">Manage Accounts</a>
+                                <span>Manage Accounts</span>
                                 
                             </li>
                            
@@ -19,23 +19,28 @@
                     <!-- END PAGE HEADER-->
                     <div class="row">
                         <div class="col-md-12 ">
-						<div class="portlet box red">
+						<div class="portlet box green">
                                 <div class="portlet-title">
                                     <div class="caption">
-                                        <i class="fa fa-cogs"></i>Table </div>
+                                        <i class="fa fa-cogs"></i>Manage Accounts </div>
                                    
                                 </div>
                                 <div class="portlet-body">
                                     <div id="sample_3_wrapper" class="dataTables_wrapper no-footer">
 									<div class="row">
-									<div class="col-md-8 col-sm-8">
+									<div class="col-md-7 col-sm-7">
 									<div class="btn-group">
-                                                    <a href="<?php echo base_url('ManageAccounts/create_account'); ?>" id="sample_editable_1_2_new" class="btn sbold red"> Add New
+                                                    <a href="<?php echo base_url('ManageAccounts/create_account'); ?>" id="sample_editable_1_2_new" class="btn sbold green"> Add New
                                                         <i class="fa fa-plus"></i></a>
                                                     
                                                 </div>
 									</div>
-									<div class="col-md-4 col-sm-4"><div id="sample_3_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_3"></label></div></div></div><div class="table-scrollable">
+									<div class="col-md-5 col-sm-5">	
+					
+				
+				</div>
+				</div>
+									<div class="table-scrollable">
 									<table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" id="sample_3" role="grid" aria-describedby="sample_3_info">
                                         <thead>
                                             <tr role="row">
@@ -43,7 +48,6 @@
 							
 									   <tr>
 											<th> # </th>
-											
 											<th>Account Name</th>
 											<th>Account Id</th>
 											<th>Total Leads</th>
@@ -65,19 +69,19 @@
 										 <?php
                                          switch (true) {
 										 case ($row->account_status == 1):
-										 echo '<button type="button" class="btn green-haze">Active</button>' ;
+										 echo '<form action="'.base_url('ManageAccounts/update_status/'.$row->id).'"><input type="hidden" name="status" value="0"><button type="submit" name="update_status" class="btn green">Active</button></form>' ;
 										 break;
 										 case ($row->account_status == 0):
-										 echo '<button type="button" class="btn red-haze">Disable</button>';
+										 echo '<form action="'.base_url('ManageAccounts/update_status/'.$row->id).'"><input type="hidden" name="status" value="1"><button type="submit" name="update_status" class="btn red">Disabled</button></form>' ;
 										 break;
 									     }
 										  ?>
 										<td>										
 										<div class="actions">
                                             <a href="<?php echo base_url('ManageAccounts/edit_record/'.$row->id); ?>"class="btn btn-circle green btn-icon-only btn-default"  >
-                                            <i class="icon-wrench"></i>
+                                            <i class="fa fa-pencil"></i>
                                             </a>
-                                            <a  href="javascript:void(0)" onclick="if(confirm('Do you really want to delete this user ?')){location='<?php echo base_url('ManageAccounts/remove/'). $row->id; ?>';}" class="btn btn-circle red btn-icon-only btn-default">
+                                            <a  href="javascript:void(0)" onclick="if(confirm('Do you really want to delete this account ?')){location='<?php echo base_url('ManageAccounts/remove/'). $row->id; ?>';}" class="btn btn-circle red btn-icon-only btn-default">
                                              <i class="icon-trash"></i>
                                             </a>
                                         </div>												
@@ -87,7 +91,8 @@
 									<?php endforeach; ?>
                                     </tbody>
                                     </table>
-									</div>              
+									</div> 
+<?php echo $this->pagination->create_links(); ?>									
 									</div>
                             </div>
 							</div>

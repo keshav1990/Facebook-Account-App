@@ -1,19 +1,19 @@
 <?php
 /*
 class common_model 
-@Description:- This function is used for manage the accounts.
+@Description:- This class is create as a common model.
 
-function index()
-@Description:- This function is create for show the list of all accounts.
+function insert()
+@Description:- This function is create to insert items into database.
 
-function create_account()
-@Description:- This function is created to add a new account.
+function get_record()
+@Description:- This function is create to get record from database.
 
-function remove()
-@Description:- This function is created to delete a particular account detail.
+function delete_user()
+@Description:- This function is create for  delete particular record from database.
 
-function edit_record()
-@Description:- This function is create to edit a account.
+function update()
+@Description:- This function is create to update the particular account.
 
 */
 
@@ -22,13 +22,16 @@ function edit_record()
 		public function __construct()
 		{
 			parent::__construct();
+			$this->load->library('pagination');
 			
 		}
+/* @Description:- This function is used to insert items into database. */
 		public function insert($data,$tableName="manage_account")
 		{
 			$this->db->insert($tableName,$data);
 			
 		}
+/*@Description:- This function is create to get record from database. */
 		public function get_record($tableName="manage_account",$where='',$limit=10,$offset=0)
 		{
 			if(is_array($where)){
@@ -43,6 +46,20 @@ function edit_record()
 			$result = $result->result();
 			return $result;
 		}
+			/*
+	To count no of rows in table with conditions
+	*/
+	function get_total_sum($tableName,$where=''){
+		if(is_array($where)){
+					$where = $where +  array('is_deleted'=>0);; 
+			}else{
+				$where =  array('is_deleted'=>0);
+			}
+			return 	$this->db->where($where)->from($tableName)->count_all_results();
+
+		}
+
+ /* @Description:- This function is create for  delete particular record from database. */
 		public function delete_user($tableName="manage_account",$id)
 		{
 			 ///$this->db->where('id', $id);
@@ -52,6 +69,7 @@ function edit_record()
 			return $result;
 			
 		}
+ /* @Description:- This function is create to update the perticular account. */
 		public function update($data,$tableName="manage_account",$id="")
 		{
 			
@@ -60,4 +78,32 @@ function edit_record()
 			
 			return $result;
 		}
+/*  @Description:- This function create to logout account */
+	public function fetchtable($limit,$offset)
+		{
+			$result = $this->db->limit($limit,$offset)->get('manage_account');
+			 //return $query->result();  
+			$result = $result->result();
+			// $this->db->last_query();
+			// exit;
+			return $result;
+		}
+	public function get_allusers($tableName="manage_account")
+		{
+			$result = $this->db->get($tableName);
+			//return $query->result();  
+			$result = $result->result();
+				
+			return $result;
+		}
+	public function make_like_conditions($fields, $type) 
+		{
+			$likes = array();
+			foreach ($fields as $key => $search) {
+				$likes[] = "`$key` like '%$search%'";
+			}
+			return '(' . implode($type, $likes) . ')';
+		}
+		
+		
 	}

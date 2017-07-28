@@ -3,19 +3,22 @@
                 <div class="page-content" style="min-height: 1434px;">
                     <!-- BEGIN PAGE HEADER-->
                
-                    <h1 class="page-title"> Add Account
+                    <h1 class="page-title"> <?php echo $title; ?>
                         
                     </h1>
                     <div class="page-bar">
                         <ul class="page-breadcrumb">
                             <li>
                                 <i class="icon-home"></i>
-                                <a href="index.html">Create Account</a>
+                               <a href="<?php echo base_url('ManageAccounts'); ?>"> <span>Manage Accounts</span></a>
                                 <i class="fa fa-angle-right"></i>
                             </li>
-                            <li>
-                                <span>Add Account</span>
+							<li>
+                                <i class="icon-settings"></i>
+                                <span><?php echo $title; ?></span>
+                               
                             </li>
+                            
                         </ul>
                     </div>
                     <!-- END PAGE HEADER-->
@@ -41,7 +44,7 @@
                                 <div class="portlet-title">
                                     <div class="caption font-red-sunglo">
                                         <i class="icon-settings font-red-sunglo"></i>
-                                        <span class="caption-subject bold uppercase"> Add Account</span>
+                                        <span class="caption-subject bold uppercase"> <?php echo $title; ?></span>
                                     </div>
                                  </div>
                                 <div class="portlet-body form">
@@ -81,7 +84,7 @@
                                             
                                         </div>
                                         <div class="form-actions">
-                                            <button type="submit"  name="add_account" class="btn blue">Add Account</button>
+                                            <button type="submit"  name="add_account" class="btn blue"><?php echo $button_label; ?></button>
                                             <button type="reset" class="btn default">Reset Form</button>
                                            
                                         </div>
