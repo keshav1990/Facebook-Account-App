@@ -23,39 +23,72 @@
                                 <div class="portlet-title">
                                     <div class="caption">
                                         <i class="fa fa-cogs"></i>Table </div>
-                                    <div class="actions">
-                                        <a href="javascript:;" class="btn btn-default btn-sm">
-                                            <i class="fa fa-plus"></i> Add </a>
-                                       
-                                    </div>
+                                   
                                 </div>
                                 <div class="portlet-body">
                                     <div id="sample_3_wrapper" class="dataTables_wrapper no-footer">
 									<div class="row">
-									<div class="col-md-6 col-sm-6">
-									<div class="dataTables_length" id="sample_3_length"><label>Show <select name="sample_3_length" aria-controls="sample_3" class="form-control input-sm input-xsmall input-inline"><option value="6">6</option><option value="15">15</option><option value="20">20</option><option value="-1">All</option></select></label></div></div><div class="col-md-6 col-sm-6"><div id="sample_3_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_3"></label></div></div></div><div class="table-scrollable"><table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" id="sample_3" role="grid" aria-describedby="sample_3_info">
+									<div class="col-md-8 col-sm-8">
+									<div class="btn-group">
+                                                    <a href="<?php echo base_url('ManageAccounts/create_account'); ?>" id="sample_editable_1_2_new" class="btn sbold red"> Add New
+                                                        <i class="fa fa-plus"></i></a>
+                                                    
+                                                </div>
+									</div>
+									<div class="col-md-4 col-sm-4"><div id="sample_3_filter" class="dataTables_filter"><label>Search:<input type="search" class="form-control input-sm input-small input-inline" placeholder="" aria-controls="sample_3"></label></div></div></div><div class="table-scrollable">
+									<table class="table table-striped table-bordered table-hover table-checkable order-column dataTable no-footer" id="sample_3" role="grid" aria-describedby="sample_3_info">
                                         <thead>
-                                            <tr role="row"><th class="table-checkbox sorting_disabled" rowspan="1" colspan="1" aria-label="
-                                                    
-                                                        
-                                                        
-                                                    
-                                                " style="width: 40px;">
-                                                    <label class="mt-checkbox mt-checkbox-single mt-checkbox-outline">
-                                                        <input type="checkbox" class="group-checkable" data-set="#sample_3 .checkboxes">
-                                                        <span></span>
-                                                    </label>
-                                                </th><th class="sorting_asc" tabindex="0" aria-controls="sample_3" rowspan="1" colspan="1" aria-sort="ascending" aria-label=" Username : activate to sort column descending" style="width: 70px;"> Username </th><th class="sorting" tabindex="0" aria-controls="sample_3" rowspan="1" colspan="1" aria-label=" Email : activate to sort column ascending" style="width: 116px;"> Email </th><th class="sorting" tabindex="0" aria-controls="sample_3" rowspan="1" colspan="1" aria-label=" Status : activate to sort column ascending" style="width: 52px;"> Status </th></tr>
-                                        </thead>
-                                        <tbody>
-                                            
-                                            
-                                            
-                                            
-                                            
-                                            </tbody>
-                                    </table></div><div class="row"><div class="col-md-5 col-sm-5"><div class="dataTables_info" id="sample_3_info" role="status" aria-live="polite">Showing 1 to 6 of 12 records</div></div><div class="col-md-7 col-sm-7"><div class="dataTables_paginate paging_bootstrap_number" id="sample_3_paginate"><ul class="pagination" style="visibility: visible;"><li class="prev disabled"><a href="#" title="Prev"><i class="fa fa-angle-left"></i></a></li><li class="active"><a href="#">1</a></li><li><a href="#">2</a></li><li class="next"><a href="#" title="Next"><i class="fa fa-angle-right"></i></a></li></ul></div></div></div></div>
-                                </div>
+                                            <tr role="row">
+											
+							
+									   <tr>
+											<th> # </th>
+											
+											<th>Account Name</th>
+											<th>Account Id</th>
+											<th>Total Leads</th>
+											<th>Account Status</th>
+											<th style="text-align:center">Action</th>
+										</tr>
+										</tr>
+                                  </thead>
+											
+                                    
+                                          <tbody>
+                                    <?php  foreach($user as $row): ?>    
+									<tr>   						 
+										 <td><?= $row->id?></td>  
+										 <td><?= $row->account_name?></td>  
+										 <td><?= $row->account_id?></td> 
+										 <td><?= $row->total_leads?></td> 
+										 <td>
+										 <?php
+                                         switch (true) {
+										 case ($row->account_status == 1):
+										 echo '<button type="button" class="btn green-haze">Active</button>' ;
+										 break;
+										 case ($row->account_status == 0):
+										 echo '<button type="button" class="btn red-haze">Disable</button>';
+										 break;
+									     }
+										  ?>
+										<td>										
+										<div class="actions">
+                                            <a href="<?php echo base_url('ManageAccounts/edit_record/'.$row->id); ?>"class="btn btn-circle green btn-icon-only btn-default"  >
+                                            <i class="icon-wrench"></i>
+                                            </a>
+                                            <a  href="javascript:void(0)" onclick="if(confirm('Do you really want to delete this user ?')){location='<?php echo base_url('ManageAccounts/remove/'). $row->id; ?>';}" class="btn btn-circle red btn-icon-only btn-default">
+                                             <i class="icon-trash"></i>
+                                            </a>
+                                        </div>												
+										</td>
+										
+									</tr>
+									<?php endforeach; ?>
+                                    </tbody>
+                                    </table>
+									</div>              
+									</div>
                             </div>
 							</div>
 							</div>

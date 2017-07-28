@@ -45,7 +45,7 @@
                                     </div>
                                  </div>
                                 <div class="portlet-body form">
-                                  <?php echo  form_open_multipart(''); ?>
+                                  <?php echo  form_open(''); ?>
                                         <div class="form-body">
                                            <div class="row">
 										   <?php $account_nameError = strip_tags( form_error('account_name')); ?>
