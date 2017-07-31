@@ -2,16 +2,14 @@
 /* 
 
 class Login 
-@Description:- This function is used for manage the accounts.
+@Description:- This class is used for manage the accounts.
 
 function index()
 @Description:- This function is used to show the login page.
 
 function loginAccount()
-@Description:- \
+@Description:- This function is create to login user with valid account   */ 
 
-
-*/
 
 	class Login extends CI_Controller
 	{
@@ -30,7 +28,7 @@ function loginAccount()
 		{
 			$this->load->view('user-login');
 		}
-/* @Description:-  */
+/* @Description:- This function is create to login user with valid account   */
 			public function loginAccount()
 		{
 			
@@ -54,8 +52,7 @@ function loginAccount()
 				
 					);
 					$result = $this->account_model->login($data);
-				//print_r($result);
-			// die;
+				
 			 /* if we are getting any response then the store detail in session and redirect */
 			  if(count($result)>0)
 			  {

@@ -1,7 +1,7 @@
 <?php
 /*
 class common_model 
-@Description:- This class is create as a common model.
+@Description:- This class is used to manage account,create account and account setting.
 
 function insert()
 @Description:- This function is create to insert items into database.
@@ -15,6 +15,8 @@ function delete_user()
 function update()
 @Description:- This function is create to update the particular account.
 
+public function get_userdetail()
+@Description:- This function create to get login user detail.
 */
 
 	class common_model extends CI_Model
@@ -41,14 +43,14 @@ function update()
 			}
 			$this->db->select('*')->from($tableName)->where($where)->limit($limit,$offset);
 
-		//	$this->db->get();
-		$result = $this->db->get();
+		
+			$result = $this->db->get();
 			$result = $result->result();
 			return $result;
 		}
-			/*
-	To count no of rows in table with conditions
-	*/
+ /*
+	@Description:- To count no of rows in table with conditions
+ */
 	function get_total_sum($tableName,$where=''){
 		if(is_array($where)){
 					$where = $where +  array('is_deleted'=>0);; 
@@ -62,8 +64,7 @@ function update()
  /* @Description:- This function is create for  delete particular record from database. */
 		public function delete_user($tableName="manage_account",$id)
 		{
-			 ///$this->db->where('id', $id);
-			///$this->db->delete($tableName,$id);
+			
 			$data = array('is_deleted'=>1);
 			$result = $this->db->update($tableName, $data,$id);
 			return $result;
@@ -78,24 +79,7 @@ function update()
 			
 			return $result;
 		}
-/*  @Description:- This function create to logout account */
-	public function fetchtable($limit,$offset)
-		{
-			$result = $this->db->limit($limit,$offset)->get('manage_account');
-			 //return $query->result();  
-			$result = $result->result();
-			// $this->db->last_query();
-			// exit;
-			return $result;
-		}
-	public function get_allusers($tableName="manage_account")
-		{
-			$result = $this->db->get($tableName);
-			//return $query->result();  
-			$result = $result->result();
-				
-			return $result;
-		}
+/*  @Description:- This function create to search particular account */
 	public function make_like_conditions($fields, $type) 
 		{
 			$likes = array();
@@ -104,6 +88,19 @@ function update()
 			}
 			return '(' . implode($type, $likes) . ')';
 		}
-		
-		
+/*  @Description:- This function create to get login user detail */		
+		public function get_userdetail($data,$tableName="admin_login")
+		{
+			$this->db->select('*');
+			$this->db->from($tableName);
+			$this->db->where($data);
+			$query = $this->db->get();
+			if($query->num_rows() > 0)
+				{
+					 $query=$query->result();
+					return $query[0]->admin_id;
+					} else {
+					return false;
+				}
+		}
 	}

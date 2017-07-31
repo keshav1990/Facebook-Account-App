@@ -27,19 +27,19 @@
                             <li class="dropdown dropdown-user">
                                 <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                                     <img alt="" class="img-circle" src="<?php echo base_url(); ?>assets/layouts/layout2/img/avatar3_small.jpg">
-                                    <span class="username username-hide-on-mobile"> Nick </span>
+                                    <span class="username username-hide-on-mobile">  <?php echo   $this->session->userdata('admin_name'); ?> </span>
                                     <i class="fa fa-angle-down"></i>
                                 </a>
                                 <ul class="dropdown-menu dropdown-menu-default">
                                     <li>
-                                        <a href="page_user_profile_1.html">
-                                            <i class="icon-user"></i> My Profile </a>
+                                        <a href="<?php echo base_url('ManageAccounts/myaccountSetting/') ?>">
+                                            <i class="fa fa-user"></i> My Account </a>
                                     </li>
                                   
                                   
                                     <li>
                                         <a href="<?php echo base_url('ManageAccounts/logout/');?>">
-                                            <i class="icon-key"></i> Log Out </a>
+                                            <i class="fa fa-sign-out"></i> Log Out </a>
                                     </li>
                                 </ul>
                             </li>

@@ -82,7 +82,7 @@
                                             <i class="fa fa-pencil"></i>
                                             </a>
                                             <a  href="javascript:void(0)" onclick="if(confirm('Do you really want to delete this account ?')){location='<?php echo base_url('ManageAccounts/remove/'). $row->id; ?>';}" class="btn btn-circle red btn-icon-only btn-default">
-                                             <i class="icon-trash"></i>
+                                          <i class="fa fa-trash-o"></i>
                                             </a>
                                         </div>												
 										</td>

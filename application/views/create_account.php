@@ -59,8 +59,9 @@
                                                     <input type="text" name="account_name" value="<?php echo $account_name; ?>" class="form-control spinner" placeholder="Account Name"> </div>
 														
 											</div>
-                                           <div class="form-group  col-md-6">
-                                                <label>Account ID</label>
+											 <?php $account_idError = strip_tags( form_error('account_id')); ?>
+                                           <div class="form-group  col-md-6 <?php if($account_idError){ ?> has-error <?php }?>">
+                                                <?php if($account_idError){ ?><label class="control-label"><?php echo $account_idError; ?></label><?php }else{?> <label>Account ID</label><?php } ?>
                                                 <div>
                                                    
                                                     <input type="text" name="account_id" value="<?php echo $account_id; ?>" class="form-control spinner" placeholder="Account ID"> </div>
@@ -99,8 +100,8 @@
             </div>
 
 <?php 
-$this->load->view('common/css_other'); 
-$this->load->view('common/home_css'); 
+	 $this->load->view('common/css_other'); 
+	 $this->load->view('common/home_css'); 
 	 $this->load->view('common/common_js');
 	 $this->load->view('common/theme_js');
 	 ?>

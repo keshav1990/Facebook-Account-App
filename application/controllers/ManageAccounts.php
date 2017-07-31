@@ -1,7 +1,7 @@
 <?php
 /*
 class ManageAccounts 
-@Description:- This function is used for manage the accounts.
+@Description:- This class is used for manage the accounts.
 
 function index()
 @Description:- This function is create for show the list of all accounts.
@@ -53,10 +53,10 @@ function logout()
 					$this->load->library('pagination');
 			//echo $this->db->last_query();
 			$config['base_url'] = $paginationUrl;
-$config['total_rows'] = $total_rows;
-$config['per_page'] = 10;
+			$config['total_rows'] = $total_rows;
+			$config['per_page'] = 10;
 
-$this->pagination->initialize($config);
+		$this->pagination->initialize($config);
 
 //echo $this->pagination->create_links();
 			$data['theme'] = 'Manage_account';
@@ -118,22 +118,24 @@ $this->pagination->initialize($config);
 				/* if we are getting any response then redirect with success */
 				if($result >0)
 				{
-					//show success msg
+					
 					$this->session->set_flashdata('success', 'Delete Record successfully..');
 				}
 				else
 				{
-					//else error msg
+				
 					$this->session->set_flashdata('error', 'Try Again Later');
 				}
-				//both redirect to user list page
+				
 				redirect("ManageAccounts/index");
 			}	
-	
-public function update_status($id){
-if(isset($_GET) && isset($_GET['update_status'])){
-	$data = array(
-				
+/* 
+	@Description:- This function is create to update status.
+ */			
+	public function update_status($id){
+			if(isset($_GET) && isset($_GET['update_status'])){
+				$data = array(
+							
 				'account_status' => $this->input->get('status')
 			);
 			 $this->common_model->update($data,'manage_account',array('id'=>$id));
@@ -162,7 +164,7 @@ if(isset($_GET) && isset($_GET['update_status'])){
 				'total_leads' => $this->input->post('total_leads'),
 				'account_status' => $this->input->post('status')
 			);
-			 $this->common_model->update($data,'manage_account',array('id'=>$id));
+			$this->common_model->update($data,'manage_account',array('id'=>$id));
 			redirect(base_url('ManageAccounts'));
 			exit;
 			}
@@ -173,10 +175,9 @@ if(isset($_GET) && isset($_GET['update_status'])){
 			$data['status'] = $_POST['account_status'];			
 			}else{
 				/* to get default values */
-			//$user = $this->db->get_where("manage_account",)->result();
+
 			$user = $this->common_model->get_record("manage_account",array("id"=>$id),1);
-			//echo $this->db->last_query();
-			//print_r($user);
+			
 			$user = json_decode(json_encode($user[0]),true);
 			$data = array();
 			
@@ -185,9 +186,7 @@ if(isset($_GET) && isset($_GET['update_status'])){
 			$data['total_leads'] = $user['total_leads'];
 			$data['status'] = $user['account_status'];	
 			}
-			
-		//	print_r($data);
-			//$data['theme'] = 'create_account';
+		
 			$data['theme'] = 'create_account';
 			//print_r($data);
 			$data['button_label'] = "Update";
@@ -200,6 +199,79 @@ if(isset($_GET) && isset($_GET['update_status'])){
 				$this->session->sess_destroy();
 				redirect('Login');
 			}
+/*  @Description:- This function is create to change user detail. */
 
+
+		public function myaccountSetting(){
+				$data = array();
+				$this->form_validation->set_rules('admin_name','Admin Name','trim|required');
+				$this->form_validation->set_rules('admin_email','Admin Email','trim|required|valid_email');
+				$isPassword = 0;
+				if(isset($_POST['oldpassword']) && trim($_POST['oldpassword'])!=''){
+				$isPassword = 1;
+				$this->form_validation->set_rules('oldpassword', 'Please Enter Old Password', 'trim|required');
+				$this->form_validation->set_rules('newpassword', 'Please Enter New Password', 'required');
+				$this->form_validation->set_rules('confirmpassword', 'Confirm Password Doesn\'t matched', 'required|matches[newpassword]');
+				}
+				
+				/* this condition is used to check the form validation */
+				if($this->form_validation->run()== FALSE)
+				{
+				
+					$data['theme'] = 'myAccount';
+					$this->load->view('theme',$data);
+					
+				}
+				
+				else
+				{
+					if($isPassword)
+					{
+					/* else encrypt the posted password */
+					$password = sha1($this->input->post('oldpassword'));
+					$data = array(
+					 'admin_name' => $this->input->post('admin_name'), 
+					 'admin_email' => $this->input->post('admin_email'), 
+					 'admin_password' => $password 
+					 );
+					
+					$result = $this->common_model->get_userdetail($data);
+					/* if we are getting any response then redirect with success */
+					if($result>0)
+						{
+						 $data = array(
+							'admin_name' => $this->input->post('admin_name'),
+							'admin_email' => $this->input->post('admin_email'),
+							'admin_password' => sha1($this->input->post('newpassword'))
+								);
+						
+							$this->db->update('admin_login', $data,array('admin_id'=>$result));
+							
+							redirect('ManageAccounts/logout');exit;
+						 }
+					 else
+						{
+							$msg = array(
+							'error_message' => "Old Password doesn't matched."
+							);
+							$this->session->set_flashdata($msg);
+							$data['theme'] = 'myAccount';
+							$this->load->view('theme',$data);
 			
+							}
+				
+					}else{
+					$data = array(
+							'admin_name' => $this->input->post('admin_name'),
+							'admin_email' => $this->input->post('admin_email'),
+							//'admin_password' => sha1($this->input->post('newpassword'))
+								);	
+								$this->db->update('admin_login', $data,array('admin_id'=>$result));
+							
+							redirect('ManageAccounts/myaccountSetting');exit;
+					}	
+		}
 	}
+							
+	}		
+	
