@@ -25,7 +25,15 @@
                                 <span class="title">Add New Account</span>
                                 <span class="arrow"></span>
                             </a>
-                           
+
+                        </li>
+                        <li class="nav-item start ">
+                            <a href="<?php echo base_url('ManageAccounts/create_token'); ?>" class="nav-link">
+                                <i class="fa fa-facebook" aria-hidden="true"></i>
+                                <span class="title">Create Access Token</span>
+                                <span class="arrow"></span>
+                            </a>
+
                         </li>
                        
                     </ul>
