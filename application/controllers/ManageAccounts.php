@@ -225,16 +225,16 @@ class ManageAccounts extends CI_Controller {
       $data['accesstoken'] = $this->facebook->is_authenticated();
       // GET FAN PAGES ID,NAME,ACCESS TOKEN
       $userProfile1 = $this->facebook->request('get', '/me/accounts');
-      echo "<pre>";
-      print_r($userProfile1['data']);
-       echo "</pre>";
-       exit;
-      /*$response = $request->execute();
-      $graphObject = $response->getGraphObject();
-      print_r($graphObject);
-      exit;
-
-      */
+      $admin_login =  $this->session->userdata();
+      $accesstoken = $data['accesstoken'] ;
+      $fb_id = $userProfile['id'];
+      $data1 = array(
+       "fb_id" => $fb_id,
+       "token" => $accesstoken,
+       "login_date" => date('Y-m-d h:i:s'),
+      );
+      // this model function is used for update facebook id,access token of login user
+      $result =  $this->common_model->fb_detailupdate('admin_login',$data1,$admin_login['admin_logged_id']);
       $userData['oauth_provider'] = 'facebook';
       $userData['oauth_uid'] = $userProfile['id'];
       $userData['first_name'] = $userProfile['first_name'];
@@ -244,7 +244,6 @@ class ManageAccounts extends CI_Controller {
       $userData['profile_url'] = 'https://www.facebook.com/' . $userProfile['id'];
       $userData['picture_url'] = $userProfile['picture']['data']['url'];
       $data['userData'] = $userData;
-      $accesstoken = $data['accesstoken'];
       $data['logoutUrl'] = $this->facebook->logout_url();
     }
     else {
