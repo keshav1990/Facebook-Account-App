@@ -76,11 +76,11 @@ public function get_userdetail()
 			
 			//$this->db->where('id', $id['id']);
 			$result = $this->db->update($tableName, $data,$id);
-			
+
 			return $result;
 		}
 /*  @Description:- This function create to search particular account */
-	public function make_like_conditions($fields, $type) 
+	public function make_like_conditions($fields, $type)
 		{
 			$likes = array();
 			foreach ($fields as $key => $search) {
@@ -88,7 +88,7 @@ public function get_userdetail()
 			}
 			return '(' . implode($type, $likes) . ')';
 		}
-/*  @Description:- This function create to get login user detail */		
+/*  @Description:- This function create to get login user detail */
 		public function get_userdetail($data,$tableName="admin_login")
 		{
 			$this->db->select('*');
@@ -103,4 +103,13 @@ public function get_userdetail()
 					return false;
 				}
 		}
+
+ /*  @Description:- This function create to update fb details of login user */
+        public function fb_detailupdate($table,$data,$id){
+          $this->db->where('admin_id',$id);
+			$result = $this->db->update($table,$data);
+
+			return $result;
+
+        }
 	}
