@@ -20,9 +20,15 @@ function logout()
 
 function create_token()
 @Description:- This function is created to add a new access token.
+
 function  fblogout()
 @Description:- This function is lofout facebook.
 
+function fan_pageadd()
+@Description:- This function is to add fan pages in db.
+
+function curl()
+@Description:- This function is to get file content from url.
 */
 class ManageAccounts extends CI_Controller {
   public function __construct() {
@@ -34,6 +40,16 @@ class ManageAccounts extends CI_Controller {
     if ($this->session->userdata('admin_logged_id') != true) {
       redirect("login");
     }
+  /* curl() @Description:- This function is to get file content from url.  */
+        function curl($url){
+         $ch = curl_init();
+         curl_setopt($ch, CURLOPT_URL,$url);
+         curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
+         curl_setopt($ch, CURLOPT_SSL_VERIFYHOST,0);
+         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER,0);
+         $return = curl_exec($ch); curl_close ($ch);
+         return $return;
+        }
   }
 /*
 @Description:- This function is create for show the list of all accounts.
@@ -217,15 +233,48 @@ class ManageAccounts extends CI_Controller {
 /*  @Description:- This function is create to add a new access token. */
   public function create_token() {
     $userData = array();
+    $admin_login =  $this->session->userdata();
+    $result =  $this->common_model->select_condition("admin_login","admin_id",$admin_login['admin_logged_id']);
+      $error = 1;
+      if($result[0]->fb_id == "" && $result[0]->token == ""){
+       $data['authUrl'] = $this->facebook->login_url();
+        $error = 0;
+      }
+      else{
+
+
+         try {
+  $response = $this->facebook->request('get','/debug_token?input_token='.$result[0]->token, $this->config->item('facebook_app_id')."|".$this->config->item('facebook_app_secret'));
+} catch(\Facebook\Exceptions\FacebookSDKException $e) {
+               print_r($e);
+}
+          print_r($response) ;
+          exit;
+
+          $error = $response['data']['is_valid']?1:0 ;
+          if($error>0){
+           $this->session->set_userdata('fb_access_token', $result[0]->token);
+          }
+         }
+      //print_r($error);
+      //exit;
+      //die;
      // Check if user is logged in
-      if ($this->facebook->is_authenticated()) {
+     if ($this->facebook->is_authenticated() && $error==1) {
       // Get user facebook profile details
       $userProfile = $this->facebook->request('get', '/me?fields=id,first_name,last_name,gender,locale,picture');
       // GET ACCESS TOKEN
+      if(!$userProfile){
+        $data['authUrl'] = $this->facebook->login_url();
+         $data['theme'] = 'fblogin';
+    $this->load->view('theme', $data);
+      }   else{
+
+
       $data['accesstoken'] = $this->facebook->is_authenticated();
       // GET FAN PAGES ID,NAME,ACCESS TOKEN
       $userProfile1 = $this->facebook->request('get', '/me/accounts');
-      $admin_login =  $this->session->userdata();
+
       $accesstoken = $data['accesstoken'] ;
       $fb_id = $userProfile['id'];
       $data1 = array(
@@ -235,6 +284,8 @@ class ManageAccounts extends CI_Controller {
       );
       // this model function is used for update facebook id,access token of login user
       $result =  $this->common_model->fb_detailupdate('admin_login',$data1,$admin_login['admin_logged_id']);
+
+      //   $userData in this variable all facebook information is stored
       $userData['oauth_provider'] = 'facebook';
       $userData['oauth_uid'] = $userProfile['id'];
       $userData['first_name'] = $userProfile['first_name'];
@@ -245,18 +296,43 @@ class ManageAccounts extends CI_Controller {
       $userData['picture_url'] = $userProfile['picture']['data']['url'];
       $data['userData'] = $userData;
       $data['logoutUrl'] = $this->facebook->logout_url();
+      $data['fan_page'] = $userProfile1;
     }
-    else {
-      $fbuser = '';
-// Get login URL
-      $data['authUrl'] = $this->facebook->login_url();
+
+    }else {
+     $data['authUrl'] = $this->facebook->login_url();
+
     }
-    $this->load->view('fblogin', $data);
+   // die();
+   // $this->load->view('fblogin', $data);
+     $data['theme'] = 'fblogin';
+    $this->load->view('theme', $data);
   }
 /* fblogout()  @Description:- This function is lofout facebook. */
   public function fblogout() {
     $data['authUrl'] = $this->facebook->login_url();
     $this->facebook->destroy_session();
-    redirect('fblogin', $data);
+    redirect('ManageAccounts/create_token', $data);
+
+  }
+
+/* fan_pageadd()  @Description:- This function is to add fan pages in db. */
+  public function fan_pageadd(){
+  $fan_page = $this->input->post("fan_page");
+  $fan_page_array = explode("_",$fan_page);
+  $token = $fan_page_array[1];
+  $url = "https://graph.facebook.com/oauth/access_token?client_id=".$this->config->item('facebook_app_id')."&client_secret=".$this->config->item('facebook_app_secret')."&grant_type=fb_exchange_token&fb_exchange_token=".urlencode($token);
+  $response =(array) json_decode(curl(str_replace(' ', '+', $url)));
+  $admin_login =  $this->session->userdata();
+  $data = array(
+   'user_id' => $admin_login['admin_logged_id'],
+   'page_id' => $fan_page_array[0],
+   'page_name' => $fan_page_array[2],
+   'page_token' => $response['access_token'],
+   'created' => date('Y-m-d h:i:s')
+  );
+  $result =  $this->common_model->insert($data,"pages") ;
+  $this->session->set_flashdata('success', 'Added successfully..');
+  $this->create_token();
   }
 }
