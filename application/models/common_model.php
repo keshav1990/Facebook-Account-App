@@ -17,6 +17,9 @@ function update()
 
 public function get_userdetail()
 @Description:- This function create to get login user detail.
+
+public function fb_detailupdate()
+@Description:- This function create to update fb details of login user
 */
 
 	class common_model extends CI_Model
@@ -31,13 +34,13 @@ public function get_userdetail()
 		public function insert($data,$tableName="manage_account")
 		{
 			$this->db->insert($tableName,$data);
-			
+
 		}
 /*@Description:- This function is create to get record from database. */
 		public function get_record($tableName="manage_account",$where='',$limit=10,$offset=0)
 		{
 			if(is_array($where)){
-					$where = $where +  array('is_deleted'=>0);; 
+					$where = $where +  array('is_deleted'=>0);;
 			}else{
 				$where =  array('is_deleted'=>0);
 			}
@@ -112,4 +115,21 @@ public function get_userdetail()
 			return $result;
 
         }
+/*  @Description:- This function create to select on base of condition */
+
+     public function select_condition($table,$key,$value){
+     $condition = $key." ="." '".$value."'";
+            $this->db->select('*');
+			$this->db->from($table);
+			$this->db->where($condition);
+			$query = $this->db->get();
+			if($query->num_rows() > 0)
+				{
+					 $query=$query->result();
+					return $query;
+					} else {
+					return false;
+				}
+     }
+
 	}
